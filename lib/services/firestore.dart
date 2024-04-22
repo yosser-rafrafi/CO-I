@@ -24,4 +24,20 @@ class FirestoreService
 
       return PersonsStream;
     }
+
+    //UPDATE : update persons given a doc id
+    Future<void> updatePerson (String docID, String newPerson)
+    {
+      return persons.doc(docID).update({
+        'person': newPerson ,
+        'timestamp' : Timestamp.now(),
+    
+      });
+    }
+    
+    // DELETE : delete persons give, a doc id 
+       Future<void> deletePerson (String docID)
+       {
+        return persons.doc(docID).delete();
+       }
 }

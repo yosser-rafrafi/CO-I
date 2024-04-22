@@ -18,7 +18,7 @@ final FirestoreService firestoreService = FirestoreService();
   // text controller 
   final TextEditingController textController = TextEditingController();
 //open a dialog vox to add a person 
-void openPersonBox()
+void openPersonBox({String? docID})
 {
   showDialog(context: context, 
   builder: (context) =>  AlertDialog(
@@ -30,8 +30,14 @@ void openPersonBox()
       ElevatedButton(
         onPressed: () {
           //add a new person
+          if (docID == null){
           firestoreService.addPerson(textController.text);
+          }
 
+          // update an existing person
+          else {
+            firestoreService.updatePerson(docID, textController.text);
+          }
           //clear the text controller
           textController.clear();
           
@@ -67,7 +73,7 @@ void openPersonBox()
             {
               // get each individual doc
               DocumentSnapshot document = personsList[index];
-              String docId = document.id;
+              String docID = document.id;
               
               // get person from each doc
               Map<String, dynamic> data = 
@@ -77,6 +83,21 @@ void openPersonBox()
               // display as a List 
               return ListTile(
                 title : Text(personText),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children : [
+                    //update button
+                   IconButton(
+                  onPressed: () => openPersonBox(docID : docID),
+                  icon: const Icon(Icons.settings),
+                  ),
+                  //delete button
+                   IconButton(
+                  onPressed: () =>firestoreService.deletePerson(docID),
+                  icon: const Icon(Icons.delete),
+                  )
+                  ],
+                ),
               );
 
 
