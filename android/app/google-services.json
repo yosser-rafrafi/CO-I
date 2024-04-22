@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "516000289703",
+    "project_id": "coii-380a7",
+    "storage_bucket": "coii-380a7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:516000289703:android:8899df80c1899c1a59dc82",
+        "android_client_info": {
+          "package_name": "com.example.co_i_front2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdNCEySncYvqfmCD4-RWJjDvI5ZSbTGMo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
