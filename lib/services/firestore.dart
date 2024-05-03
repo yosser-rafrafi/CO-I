@@ -1,43 +1,61 @@
 
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+class FirestoreService {
+  // get collection of notes 
+  final CollectionReference persons = FirebaseFirestore.instance.collection('persons');
 
-class FirestoreService
-{
-  //get collection of person
-  
-  final CollectionReference persons =
-  FirebaseFirestore.instance.collection('persons');
-
-  //CREATE : add a new person
-  Future <void> addPerson (String person){
+  //CREATE: add a new person
+  Future<void> addPerson(String firstname, String lastname, String image, String relationship){
     return persons.add({
-      'person' : person,
-      'timestamp': Timestamp.now(),
+    'firstname': firstname,
+    'lastname': lastname,
+    'image': image,
+    'relationship': relationship,
+    'timestamp': Timestamp.now(),
     });
-    }
+  }
 
-    //READ : get persons from database 
-    Stream<QuerySnapshot> getPersonsStream(){
-      final PersonsStream =
-      persons.orderBy('timestamp',descending: true).snapshots();
+  //READ : get persons from database
+  Stream<QuerySnapshot> getPersonsStream() {
+    final personsStream = 
+      persons.orderBy('timestamp', descending: true).snapshots();
 
-      return PersonsStream;
-    }
+    return personsStream;
+  }
 
-    //UPDATE : update persons given a doc id
-    Future<void> updatePerson (String docID, String newPerson)
-    {
-      return persons.doc(docID).update({
-        'person': newPerson ,
-        'timestamp' : Timestamp.now(),
-    
-      });
-    }
-    
-    // DELETE : delete persons give, a doc id 
-       Future<void> deletePerson (String docID)
-       {
-        return persons.doc(docID).delete();
-       }
+  //update: update persons given a doc id 
+  Future<void> updatePerson(String docID, String? firstname, String? lastname, String? image, String? relationship) async {
+  // ignore: unused_local_variable
+  final DocumentSnapshot doc = await persons.doc(docID).get();
+
+  final Map<String, dynamic> updatedData = {};
+
+  if (firstname != null && firstname.isNotEmpty) {
+    updatedData['firstname'] = firstname;
+  }
+
+  if (lastname != null && lastname.isNotEmpty) {
+    updatedData['lastname'] = lastname;
+  }
+
+  if (image != null && image.isNotEmpty) {
+    updatedData['image'] = image;
+  }
+
+  if (relationship != null && relationship.isNotEmpty) {
+    updatedData['relationship'] = relationship;
+  }
+
+  updatedData['timestamp'] = Timestamp.now();
+
+  return persons.doc(docID).update(updatedData);
+}
+
+
+
+  //DELETE: delete persons given a doc id 
+  Future<void> deletePerson(String docID){
+    return persons.doc(docID).delete();
+  }
 }
