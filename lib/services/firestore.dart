@@ -1,9 +1,48 @@
 
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 class FirestoreService {
   // get collection of notes 
   final CollectionReference persons = FirebaseFirestore.instance.collection('persons');
+  final CollectionReference malvoyants = FirebaseFirestore.instance.collection('malvoyants');
+  final userId = FirebaseAuth.instance.currentUser!.uid;
+  // CREATE: Ajouter un malvoyant
+  Future<DocumentReference> addMalvoyant(String firstName, String lastName, String phoneNumber , String userId) async {
+    return await malvoyants.add({
+      'first name': firstName,
+      'last name': lastName,
+      'phone number': phoneNumber,
+      'userId': userId,
+
+    });
+  }
+
+  // READ: Obtenir tous les malvoyants
+  Stream<QuerySnapshot> getMalvoyantsStream() {
+    return malvoyants.snapshots();
+  }
+
+  // UPDATE: Mettre à jour les informations d'un malvoyant
+  Future<void> updateMalvoyant(String malvoyantId, String firstName, String lastName, String phoneNumber) async {
+    await malvoyants.doc(malvoyantId).update({
+      'first name': firstName,
+      'last name': lastName,
+      'phone number': phoneNumber,
+    });
+  }
+
+  
+  // DELETE: Supprimer un malvoyant
+  Future<void> deleteMalvoyant(String malvoyantId) async {
+    await malvoyants.doc(malvoyantId).delete();
+  }
+
+
+
+
+
+
 
   //CREATE: add a new person
   Future<void> addPerson(String firstname, String lastname, String image, String relationship){
@@ -59,5 +98,5 @@ class FirestoreService {
     return persons.doc(docID).delete();
   }
 
-  getMalvoyantsStream() {}
+ 
 }

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:co_i_front2/pages/add_person.dart';
+import 'package:co_i_front2/pages/malvoyants_list.dart';
 import 'package:co_i_front2/pages/person_details_page.dart';
 import 'package:co_i_front2/services/firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,6 +34,16 @@ class _HomePageState extends State<HomePage> {
               FirebaseAuth.instance.signOut();
             },
             icon: const Icon(Icons.login),
+          ),
+           IconButton(
+             onPressed: () {
+          // Naviguer vers la page AddPersonPage lorsqu'on appuie sur le bouton "Add"
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const MalvoyantsList (),
+          ));
+        },
+            icon: const Icon(Icons.settings),
           ),
 
       ],
