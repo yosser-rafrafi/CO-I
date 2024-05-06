@@ -1,10 +1,8 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:co_i_front2/pages/add_person.dart';
-import 'package:co_i_front2/pages/login_page.dart';
 import 'package:co_i_front2/pages/person_details_page.dart';
 import 'package:co_i_front2/services/firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,7 +14,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   //firestore
   final FirestoreService firestoreService = FirestoreService();
-
+  final user = FirebaseAuth.instance.currentUser!;
   //text controller
   final TextEditingController textControllerFirstname = TextEditingController();
   final TextEditingController textControllerLastname = TextEditingController();
@@ -32,12 +30,7 @@ class _HomePageState extends State<HomePage> {
       actions: [
         IconButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LoginPage(),
-                ),
-              );
+              FirebaseAuth.instance.signOut();
             },
             icon: const Icon(Icons.login),
           ),

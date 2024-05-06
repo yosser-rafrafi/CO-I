@@ -58,4 +58,6 @@ class FirestoreService {
   Future<void> deletePerson(String docID){
     return persons.doc(docID).delete();
   }
+
+  getMalvoyantsStream() {}
 }

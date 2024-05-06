@@ -1,5 +1,5 @@
 import 'package:co_i_front2/firebase_options.dart';
-import 'package:co_i_front2/pages/home_page.dart';
+import 'package:co_i_front2/pages/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 void main() async {
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: MainPage(),
     );
   }
 }
