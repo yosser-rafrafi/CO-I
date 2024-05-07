@@ -72,51 +72,107 @@ final _passwordController = TextEditingController();
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: Column(
                 children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.grey.withOpacity(0.5), // Couleur de fond transparente
-              border: Border.all(color: Colors.white),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child:  Padding(
-              padding: const EdgeInsets.only(left: 20.0),
-              child: TextField(
-              controller: _emailController,
-              decoration: const InputDecoration(
-              border: InputBorder.none,
-              hintText: 'Email',
+                  
+
+
+              //Email text Field
+              const SizedBox(height: 10),        
+              Container(
+                decoration: 
+                BoxDecoration
+                (
+                  color: const Color.fromARGB(255, 255, 253, 253).withOpacity(0.5),
+                  border: Border.all(color: Colors.white),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: 
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding
+                    (
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: 
+                      TextField(
+                        controller: _emailController,
+                        decoration: 
+                        InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Mail Adress',
+                          prefix: 
+                          SizedBox(
+                            width: 30, // Augmentez ou diminuez cette valeur selon vos besoins
+                            child: Image.asset('lib/images/mail.png', width: 20, height: 20),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    // Line 
+                    Container(
+                      height: 1, // hauteur de la ligne
+                      color: Colors.grey, // couleur de la ligne
+                      ),
+                  ],
                 ),
               ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.grey.withOpacity(0.5), // Couleur de fond transparente
-              border: Border.all(color: Colors.white),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child:  Padding(
-              padding: const EdgeInsets.only(left: 20.0),
-              child: TextField(
-              controller: _passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-              border: InputBorder.none,
-              hintText: 'Password',
-  ),
-),
-            ),
-          ),
+
+
+
+
+
+              //password text Field
+              const SizedBox(height: 10),
+              Container(
+                decoration: 
+                BoxDecoration(
+                  color: const Color.fromARGB(255, 255, 253, 253).withOpacity(0.5),
+                  border: Border.all(color: Colors.white),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: 
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child:
+                      TextField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        decoration: 
+                        InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Password',
+                          prefix: 
+                          SizedBox(
+                            width: 30, // Augmentez ou diminuez cette valeur selon vos besoins
+                            child: Image.asset('lib/images/padlock.png', width: 20, height: 20),
+                            ),
+                        ),
+                     ),
+                    ),
+                    Container(
+                      height: 1, // hauteur de la ligne
+                      color: Colors.grey, // couleur de la ligne
+                    ),
+                  ],
+                ),
+              ),
+
+
+          // boutton signIn
           const SizedBox(height: 10),
           GestureDetector(
             onTap: () => signIn(),
 
             child: Container(
+             // height: 45,
               decoration: BoxDecoration(
                 // ignore: prefer_const_constructors
-                color: Color.fromARGB(255, 57, 158, 240), // Couleur de fond transparente
+                color: Color.fromARGB(255, 112, 206, 227), // Couleur de fond transparente
                 borderRadius: BorderRadius.circular(12),
+               
               ),
               child: const Padding(
                 padding: EdgeInsets.all(20),
@@ -146,13 +202,14 @@ final _passwordController = TextEditingController();
                 child: const Text(
                   ' Register Now',
                   style: TextStyle(
-                    color: Color.fromARGB(255, 57, 158, 240),
+                    color: Color.fromARGB(255, 18, 159, 169),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
             ],
           ),
+          const SizedBox(height: 20),
                 ],
               ),
             ),

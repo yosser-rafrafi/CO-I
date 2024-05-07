@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:co_i_front2/pages/add_malvoyant.dart';
+import 'package:co_i_front2/pages/malvoyant_details_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -13,27 +14,22 @@ class MalvoyantsList extends StatefulWidget {
 class _MalvoyantsListState extends State<MalvoyantsList> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final userId = FirebaseAuth.instance.currentUser!.uid;
-  // Fonction pour ajouter un malvoyant
-  Future<void> _addMalvoyant(String firstName, String lastName, String phoneNumber) async {
-    try {
-      await _firestore.collection('malvoyants').add({
-        'first name': firstName,
-        'last name': lastName,
-        'phone number': phoneNumber,
-        'userId':userId,
-
-      });
-    } catch (e) {
-      // ignore: avoid_print
-      print('Erreur lors de l\'ajout du malvoyant: $e');
-    }
-  }
+  
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Liste des malvoyants"),
+      appBar: AppBar(title: const Text("malvoyants List"),
+      actions: [
+        IconButton(
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+            },
+            icon: const Icon(Icons.login),
+          ),
+          
+
+      ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -54,6 +50,7 @@ class _MalvoyantsListState extends State<MalvoyantsList> {
               itemBuilder: (context, index) {
                 DocumentSnapshot document = malvoyantsList[index];
                 String docID = document.id;
+
                 Map<String, dynamic> data =
                     document.data() as Map<String, dynamic>;
                 String firstname = data['first name'];
@@ -65,7 +62,18 @@ class _MalvoyantsListState extends State<MalvoyantsList> {
                   subtitle: Text(phoneNumber),
                   // Actions à effectuer lors du tap sur un malvoyant
                   onTap: () {
-                    // Implémentez ici l'action que vous souhaitez effectuer lors du tap
+                    
+                    Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                    builder: (context) => MalvoyantDetailsPage(docID: docID,
+                    firstName: firstname,
+                    lastName: lastname, 
+                    phoneNumber: phoneNumber,
+                    
+                    ),
+                    ),
+                    );
                   },
                 );
               },
