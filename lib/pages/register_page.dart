@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 class RegisterPage extends StatefulWidget {
   final VoidCallback showLoginPage;
   const RegisterPage({super.key, required this.showLoginPage});
@@ -57,6 +58,7 @@ class _RegisterPageState extends State<RegisterPage> {
       'email':email ,}
     );
   }
+    
 
   bool passwordConfirmed() {
     if (_passwordController.text.trim() == _confirmpasswordController.text.trim()){
@@ -66,219 +68,293 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-  @override
+ @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey,
-      body: SafeArea (
-        child:Center(
-          child: SingleChildScrollView(
-            child: Column(
-             mainAxisAlignment: MainAxisAlignment.center,
-             children: [
-              
-               const Text('HELLO THERE',
-               style: TextStyle(
-                fontSize: 20,
-                
-              ),
-              ),
-              const SizedBox(height: 10),
-            
-              const Text('Register below with your details!',
-              style: TextStyle(
-                fontSize: 20,
-                
-              ),
-              ),
-              const SizedBox(height: 50),
-            //first name textfield 
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    border: Border.all(color: Colors.white),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child:  Padding(
-                    padding: const EdgeInsets.only(left:20.0),
-                    child: TextField(
-                      controller: _firstNameController,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Firstname',
-                      ),
-                    ),
-                  ),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            // Image de fond
+            Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('lib/images/clipfly-ai-20240417202439.png'),
+                  fit: BoxFit.cover,
                 ),
               ),
-              const SizedBox(height: 10),
-            //last ame textfield 
-            Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+            ),
+            // SingleChildScrollView avec le contenu interne
+            SingleChildScrollView(
+              child: Center(
                 child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    border: Border.all(color: Colors.white),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child:  Padding(
-                    padding: const EdgeInsets.only(left:20.0),
-                    child: TextField(
-                      controller: _lastNameController,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Lastame',
-                      ),
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0 ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 10),
+                      const Text(
+                        'HELLO THERE',
+                        style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 36,
                     ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              //phone number text controller 
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    border: Border.all(color: Colors.white),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child:  Padding(
-                    padding: const EdgeInsets.only(left:20.0),
-                    child: TextField(
-                      controller: _phoneNumberController,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Phone Number',
+                        
                       ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    border: Border.all(color: Colors.white),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child:  Padding(
-                    padding: const EdgeInsets.only(left:20.0),
-                    child: TextField(
-                      controller: _emailController,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Email',
+                      const SizedBox(height: 10),
+                      const Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Register below with your details!',
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    border: Border.all(color: Colors.white),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left:20.0),
-                    child: TextField(
-                      controller: _passwordController,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Password',
-                      ),
-                    ),
-                  ),
-                ),
-              ),
 
-              const SizedBox(height: 10),
-              //confirm pasword 
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    border: Border.all(color: Colors.white),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left:20.0),
-                    child: TextField(
-                      controller: _confirmpasswordController,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Confirm Password',
+
+                      const SizedBox(height: 20),
+
+                      Container(
+                        
+                        decoration:
+                          BoxDecoration(
+                            color: const Color.fromARGB(255, 255, 253, 253).withOpacity(0.7),
+                            border: Border.all(color: Colors.white),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                          child: Column(
+                            children: [
+                              // Firstname text Field
+                              const SizedBox(height: 10),        
+                              Container(
+                                decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 255, 253, 253).withOpacity(0.01),                              
+                            ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                      child: TextField(
+                                        controller: _firstNameController,
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: 'First Name',
+                                        ),
+                                      ),
+                                    ),
+                                    // Line 
+                                    Container(
+                                      height: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              // last name  text Field
+                              const SizedBox(height: 10),
+                              Container(
+                                decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 255, 253, 253).withOpacity(0.01),                              
+                            ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                      child: TextField(
+                                        controller: _lastNameController,
+                                       
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: 'Last Name',
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              // phone number  text Field
+                              const SizedBox(height: 10),
+                              Container(
+                                decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 255, 253, 253).withOpacity(0.01),                              
+                            ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                      child: TextField(
+                                        controller: _phoneNumberController,
+                                        
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: 'Phone Number',
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              // email  text Field
+                              const SizedBox(height: 10),
+                              Container(
+                                decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 255, 253, 253).withOpacity(0.01),                              
+                            ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                      child: TextField(
+                                        controller: _emailController,
+                                        
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: 'Email',
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              // password text Field
+                              const SizedBox(height: 10),
+                              Container(
+                                decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 255, 253, 253).withOpacity(0.01),                              
+                            ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                      child: TextField(
+                                        controller: _passwordController,
+                                        obscureText: true,
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: 'Password',
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              // lconfirm passsworf  text Field
+                              const SizedBox(height: 10),
+                              Container(
+                                decoration:BoxDecoration(
+                              color: const Color.fromARGB(255, 255, 253, 253).withOpacity(0.01),                              
+                            ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                      child: TextField(
+                                        controller: _confirmpasswordController,
+                                        obscureText: true,
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: 'Confirm Password',
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+
+                              // Bouton signIn
+                              const SizedBox(height: 10),
+                              GestureDetector(
+                                onTap: () => signUp(),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: const Color.fromARGB(255, 112, 206, 227),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(20),
+                                    child: Center(
+                                      child: Text(
+                                        'Sign Up',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 15),
+                              // Not a member text
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    'I am member!',
+                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  GestureDetector(
+                                    onTap: widget.showLoginPage,
+                                    child: const Text(
+                                      ' Login Now',
+                                      style: TextStyle(
+                                        color: Color.fromARGB(255, 18, 159, 169),
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 15),
+                            ],
+                          ),
+                        ),
+                         
                       ),
-                    ),
+                      const SizedBox(height: 30),
+                    ],
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
-              
-              //signin button
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: GestureDetector(
-                  onTap: signUp,
-                  child: Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                     color: Colors.deepPurple,
-                     borderRadius: BorderRadius.circular(12),
-                     ),
-                    child: const Center(
-                      child: Text('Sign Up',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                      ) ,
-                      
-                      ),
-                  ),
-                ),
-              ),
-            
-              const SizedBox(height:15),
-              
-               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('I am member!',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold
-                  ),),
-                  GestureDetector(
-                    onTap: widget.showLoginPage,
-                    child: const Text(
-                      ' Login Now',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.bold
-                    ),
-                    ),
-                  )
-                ],
-              )
-              
-            ],
-                    ),
-          ),
-        ) 
-       
-      )
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

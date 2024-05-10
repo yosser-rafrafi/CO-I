@@ -1,5 +1,5 @@
 
-import 'package:co_i_front2/pages/home_page.dart';
+import 'package:co_i_front2/pages/persons_list.dart';
 import 'package:co_i_front2/services/firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -61,7 +61,7 @@ class MalvoyantDetailsPage extends StatelessWidget {
                     Navigator.push(
                     context,
                     MaterialPageRoute(
-                    builder: (context) => const HomePage()
+                    builder: (context) =>  PersonsListPage(MalvoyantId: docID)
                     
 
                     ),

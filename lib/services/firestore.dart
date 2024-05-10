@@ -7,6 +7,8 @@ class FirestoreService {
   final CollectionReference persons = FirebaseFirestore.instance.collection('persons');
   final CollectionReference malvoyants = FirebaseFirestore.instance.collection('malvoyants');
   final userId = FirebaseAuth.instance.currentUser!.uid;
+
+
   // CREATE: Ajouter un malvoyant
   Future<DocumentReference> addMalvoyant(String firstName, String lastName, String phoneNumber , String userId) async {
     return await malvoyants.add({
@@ -17,12 +19,10 @@ class FirestoreService {
 
     });
   }
-
   // READ: Obtenir tous les malvoyants
   Stream<QuerySnapshot> getMalvoyantsStream() {
     return malvoyants.snapshots();
   }
-
   // UPDATE: Mettre à jour les informations d'un malvoyant
   Future<void> updateMalvoyant(String malvoyantId, String firstName, String lastName, String phoneNumber) async {
     await malvoyants.doc(malvoyantId).update({
@@ -31,8 +31,6 @@ class FirestoreService {
       'phone number': phoneNumber,
     });
   }
-
-  
   // DELETE: Supprimer un malvoyant
   Future<void> deleteMalvoyant(String malvoyantId) async {
     await malvoyants.doc(malvoyantId).delete();
@@ -40,17 +38,14 @@ class FirestoreService {
 
 
 
-
-
-
-
   //CREATE: add a new person
-  Future<void> addPerson(String firstname, String lastname, String image, String relationship){
+  Future<void> addPerson(String firstname, String lastname, String image, String relationship , String malvoyantId){
     return persons.add({
     'firstname': firstname,
     'lastname': lastname,
     'image': image,
     'relationship': relationship,
+    'malvoyantId' : malvoyantId,
     'timestamp': Timestamp.now(),
     });
   }
@@ -62,7 +57,6 @@ class FirestoreService {
 
     return personsStream;
   }
-
   //update: update persons given a doc id 
   Future<void> updatePerson(String docID, String? firstname, String? lastname, String? image, String? relationship) async {
   // ignore: unused_local_variable

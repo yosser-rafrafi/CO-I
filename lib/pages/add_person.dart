@@ -2,7 +2,8 @@ import 'package:co_i_front2/services/firestore.dart';
 import 'package:flutter/material.dart';
 
 class AddPersonPage extends StatefulWidget {
-  const AddPersonPage({super.key}) ;
+  final String malvoyantId ;
+ const AddPersonPage({super.key, required this.malvoyantId}) ;
 
   @override
   State<AddPersonPage> createState() => _AddPersonPageState();
@@ -83,6 +84,9 @@ class _AddPersonPageState extends State<AddPersonPage> {
                   lastName,
                   imageUrl,
                   relationship,
+                  widget.malvoyantId
+                  
+                  
                 );
 
                 // Effacer les champs texte après l'ajout
