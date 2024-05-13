@@ -100,6 +100,7 @@ class _AddPersonPageState extends State<AddPersonPage> {
               },
               child: const Text('Add Person'),
             ),
+            
           ],
         ),
       ),

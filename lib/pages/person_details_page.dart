@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:co_i_front2/pages/edit_person.dart';
 import 'package:co_i_front2/services/firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,7 +21,7 @@ final FirestoreService firestoreService = FirestoreService();
     required this.relationship,
     required this.imageUrl});
     final user = FirebaseAuth.instance.currentUser!.email;
-    
+     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +41,8 @@ return Scaffold(
            
              Stack(
               children: [
-                // En-tête personnalisé
-                Container(
+                // Header
+                 Container(
                   width: MediaQuery.of(context).size.width,
                   height: 170, // Hauteur de l'en-tête
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -61,47 +62,87 @@ return Scaffold(
                    ),
 
                   
-                    child:  Column(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(top: 20.0),
-                          child: Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              'Welcome',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w300,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                        
-                          
-                           Align(
-                            
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                  
-                              '$user',
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.white,
-                              ),
-                             
-                            ),
-                          
-                          ),
-                      ],
-                    ),
                     
-                  
+                        child: Stack(
+                          children:[ 
+                            Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.only(top: 28.0),
+                                child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    'Welcome',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w300,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              
+                                
+                              Padding(
+                                padding: const EdgeInsets.only(left: 2.5),
+                                child: StreamBuilder<QuerySnapshot>(
+                                  stream: _firestore.collection('users').where('email', isEqualTo: user).snapshots(),
+                                  builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                                    if (snapshot.hasError) {
+                                      return Text('Erreur: ${snapshot.error}');
+                                    }
+                              
+                                    if (snapshot.connectionState == ConnectionState.waiting) {
+                                      return const Text('Chargement...');
+                                    }
+                              
+                                    if (snapshot.data!.docs.isEmpty) {
+                                      return const Text('Aucun utilisateur trouvé.');
+                                    }
+                              
+                                    // Si l'utilisateur est trouvé, accédez à ses données
+                                    String firstName = snapshot.data!.docs[0]['first name'];
+                                    String lastName = snapshot.data!.docs[0]['last name'];
+                              
+                                    return Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                         '$firstName $lastName',
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                               
+                            ],
+                            
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 27.0),
+                            child: Align(
+                                
+                                alignment: Alignment.topRight,
+                                child: IconButton(
+                                  onPressed: () {
+                                  },
+                                  color: Colors.white,
+                                  iconSize: 34,
+                                  icon: Icon(Icons.account_circle), // Utilisation de l'icône de compte utilisateur
+                                ),
+                              ),
+                          ),
+                          ],
+                        ),                  
                 ),
                 // Image de profil
                 Padding(
-                  padding: const EdgeInsets.only(top: 80, bottom: 20),
+                  padding: const EdgeInsets.only(top: 90, bottom: 20),
                   child: SizedBox(
                     height: 220,
                     child: Container(
@@ -120,7 +161,7 @@ return Scaffold(
                   ),
                 ),
               ],
-                       ),
+            ),
            
           
             
@@ -230,7 +271,7 @@ return Scaffold(
                             
                           ),
               ),
-               Row(
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               IconButton(
@@ -269,6 +310,12 @@ return Scaffold(
                                   width: 40, // Ajouter la largeur souhaitée
                                 ),
                               ),
+                              IconButton(
+                                      onPressed: () {
+                                        FirebaseAuth.instance.signOut();
+                                      },
+                                      icon: const Icon(Icons.login),
+                                    ),
 
                             ],
                           )

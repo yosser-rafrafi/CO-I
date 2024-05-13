@@ -78,6 +78,7 @@ class MalvoyantDetailsPage extends StatelessWidget {
                     },
                     icon: const Icon(Icons.delete),
                   ),
+                 
                 ],
               ),
             ),
