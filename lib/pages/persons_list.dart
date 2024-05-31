@@ -18,7 +18,8 @@ class PersonsListPage extends StatefulWidget {
 }
 
 class _PersonsListPageState extends State<PersonsListPage> {
-    
+  final TextEditingController _searchController = TextEditingController();
+  late List<DocumentSnapshot> searchResults = [];  
   final FirestoreService firestoreService = FirestoreService();
   final userId = FirebaseAuth.instance.currentUser!.uid;
   final user = FirebaseAuth.instance.currentUser!.email;
@@ -32,7 +33,7 @@ Widget build(BuildContext context) {
       children: [
         Container(
                   width: MediaQuery.of(context).size.width,
-                  height: 170, // Hauteur de l'en-tête
+                  height: 230, // Hauteur de l'en-tête
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
@@ -57,7 +58,7 @@ Widget build(BuildContext context) {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               const Padding(
-                                padding: EdgeInsets.only(top: 28.0),
+                                padding: EdgeInsets.only(top: 58.0),
                                 child: Align(
                                   alignment: Alignment.topLeft,
                                   child: Text(
@@ -107,12 +108,70 @@ Widget build(BuildContext context) {
                                   },
                                 ),
                               ),
+                               const SizedBox(height: 40),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(8.0),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(0.5),
+                                            spreadRadius: 2,
+                                            blurRadius: 5,
+                                            offset: const Offset(0, 3),
+                                          ),
+                                        ],
+                                      ),
+                                      child: TextField(
+                                        controller: _searchController,
+                                        decoration: InputDecoration(
+                                          hintText: 'Search',
+                                          contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(8.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 30),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular((8.0)),
+                                    ),
+                                    child: IconButton(
+                                      icon: const Icon(
+                                        Icons.search_rounded,
+                                        color: Color.fromRGBO(21, 137, 179, 1),
+                                      ),
+                                      onPressed: () async {
+                                        String searchTerm = _searchController.text.trim();
+                                        if (searchTerm.isNotEmpty) {
+                                          searchResults = await firestoreService.searchPersons(searchTerm); // Call searchPersons from FirestoreService
+                                        } else {
+                                          searchResults = [];
+                                        }
+                                        setState(() {});
+                                      },
+                                    ),
+                                  )
+                                ],
+                              ),
+
                                
                             ],
                             
+                            
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(top: 27.0),
+                            padding: const EdgeInsets.only(top: 57.0),
                             child: Align(
                                 
                                 alignment: Alignment.topRight,
@@ -121,10 +180,12 @@ Widget build(BuildContext context) {
                                   },
                                   color: Colors.white,
                                   iconSize: 34,
-                                  icon: Icon(Icons.account_circle), // Utilisation de l'icône de compte utilisateur
+                                  icon: const Icon(Icons.account_circle), // Utilisation de l'icône de compte utilisateur
                                 ),
                               ),
                           ),
+                          
+                          
                           ],
                         ),
                         
@@ -134,89 +195,113 @@ Widget build(BuildContext context) {
                     
                   
                 ),
-        Expanded(
-          child: StreamBuilder<QuerySnapshot>(
-            stream: _firestore.collection('persons').where('malvoyantId', isEqualTo: widget.MalvoyantId).snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                List personsList = snapshot.data!.docs;
-                return GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 16.0,
-                    mainAxisSpacing: 36.0,
+       Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20,vertical: 30),
+                  child:
+                  
+                  Text(
+                    'Persons List',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  itemCount: personsList.length + 1, // Increment the item count by 1
-                  itemBuilder: (context, index) {
-                    if (index == personsList.length) { // Check if it's the last item
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => AddPersonPage(
-                                malvoyantId: widget.MalvoyantId,
-                              ),
-                            ),
-                          );
-                        },
-                        child: Card(
-                          elevation: 4.0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16.0),
+                ),
+                Expanded(
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: _searchController.text.isEmpty
+                        ? _firestore.collection('persons').where('malvoyantId', isEqualTo: widget.MalvoyantId).snapshots()
+                        : _firestore.collection('persons')
+                            .where('malvoyantId', isEqualTo: widget.MalvoyantId)
+                            .where('firstname', isEqualTo: _searchController.text.trim())
+                            .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        List personsList = snapshot.data!.docs;
+                        return GridView.builder(
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 16.0,
+                            mainAxisSpacing: 36.0,
                           ),
-                          child: const Center(
-                            child: Icon(
-                              Icons.add,
-                              size: 48.0,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                      );
-                    } else {
-                      DocumentSnapshot document = personsList[index];
-                      String docID = document.id;
-                      Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-                      String firstname = data['firstname'];
-                      String lastname = data['lastname'];
-                      String image = data['image'];
-                      String relationship = data['relationship'];
-
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PersonDetailsPage(
-                                docID: docID,
-                                firstName: firstname,
-                                lastName: lastname,
-                                imageUrl: image,
-                                relationship: relationship,
-                              ),
-                            ),
-                          );
-                        },
-                        child: CustomCard(
-                          title: '$firstname $lastname',
-                          subtitle: relationship,
-                          imageUrl: image,
-                        ),
-                      );
-                    }
-                  },
-                );
-              } else if (snapshot.hasError) {
-                return const Text("No persons..!");
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
+                          itemCount: personsList.length + 1,
+                          itemBuilder: (context, index) {
+                            if (index == personsList.length) {
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AddPersonPage(
+                                        malvoyantId: widget.MalvoyantId,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Card(
+                                  elevation: 4.0,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16.0),
+                                  ),
+                                  child: const Center(
+                                    child: Icon(
+                                      Icons.add,
+                                      size: 48.0,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            } else {
+                              DocumentSnapshot document = personsList[index];
+                              String docID = document.id;
+                              Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+                              String firstname = data['firstname'];
+                              String lastname = data['lastname'];
+                              String image = data['image'];
+                              String relationship = data['relationship'];
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => PersonDetailsPage(
+                                        docID: docID,
+                                        firstName: firstname,
+                                        lastName: lastname,
+                                        imageUrl: image,
+                                        relationship: relationship,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: CustomCard(
+                                  title: '$firstname $lastname',
+                                  subtitle: relationship,
+                                  imageUrl: image,
+                                ),
+                              );
+                            }
+                          },
+                        );
+                      } else if (snapshot.hasError) {
+                        return const Text("No persons..!");
+                      } else {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
       ],
     ),
   );

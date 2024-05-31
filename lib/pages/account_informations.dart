@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 class AccountInformationsPage extends StatelessWidget {
@@ -14,6 +15,8 @@ class AccountInformationsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+           
+
             Text(
               'Account Information',
               style: TextStyle(
@@ -34,6 +37,8 @@ class AccountInformationsPage extends StatelessWidget {
               title: Text('Phone Number'),
               subtitle: Text('+1234567890'), // Remplacez par le numéro de téléphone de l'utilisateur
             ),
+
+                                                      
             // Ajoutez d'autres informations du compte ici
           ],
         ),

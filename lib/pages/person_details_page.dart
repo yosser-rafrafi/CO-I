@@ -1,4 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'package:co_i_front2/pages/blue_header.dart';
 import 'package:co_i_front2/pages/edit_person.dart';
 import 'package:co_i_front2/services/firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,8 +22,7 @@ final FirestoreService firestoreService = FirestoreService();
     required this.relationship,
     required this.imageUrl});
     final user = FirebaseAuth.instance.currentUser!.email;
-     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
+    
   @override
   Widget build(BuildContext context) {
     // Fetch person details using docID from Firestore or any other method
@@ -34,117 +34,17 @@ return Scaffold(
       child: Column(
         
         mainAxisAlignment: MainAxisAlignment.start, 
-        children: <Widget>[ 
-          
-             
-          // En-tête personnalisé et image de profil
-           
+        children: <Widget>[            
              Stack(
-              children: [
-                // Header
-                 Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 170, // Hauteur de l'en-tête
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Color.fromRGBO(21, 137, 179, 1), // Couleur foncée en haut
-                       Color.fromRGBO(136, 222, 254, 1), // Couleur claire en bas
-                      ],
-                    ),
-                    borderRadius: BorderRadius.only(
-                      bottomRight:Radius.circular(30),
-                      bottomLeft:Radius.circular(30),
-                    ),
-                   ),
-
-                  
-                    
-                        child: Stack(
-                          children:[ 
-                            Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.only(top: 28.0),
-                                child: Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    'Welcome',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w300,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              
-                                
-                              Padding(
-                                padding: const EdgeInsets.only(left: 2.5),
-                                child: StreamBuilder<QuerySnapshot>(
-                                  stream: _firestore.collection('users').where('email', isEqualTo: user).snapshots(),
-                                  builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                                    if (snapshot.hasError) {
-                                      return Text('Erreur: ${snapshot.error}');
-                                    }
-                              
-                                    if (snapshot.connectionState == ConnectionState.waiting) {
-                                      return const Text('Chargement...');
-                                    }
-                              
-                                    if (snapshot.data!.docs.isEmpty) {
-                                      return const Text('Aucun utilisateur trouvé.');
-                                    }
-                              
-                                    // Si l'utilisateur est trouvé, accédez à ses données
-                                    String firstName = snapshot.data!.docs[0]['first name'];
-                                    String lastName = snapshot.data!.docs[0]['last name'];
-                              
-                                    return Align(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                         '$firstName $lastName',
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w400,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                               
-                            ],
-                            
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 27.0),
-                            child: Align(
-                                
-                                alignment: Alignment.topRight,
-                                child: IconButton(
-                                  onPressed: () {
-                                  },
-                                  color: Colors.white,
-                                  iconSize: 34,
-                                  icon: Icon(Icons.account_circle), // Utilisation de l'icône de compte utilisateur
-                                ),
-                              ),
-                          ),
-                          ],
-                        ),                  
-                ),
-                // Image de profil
-                Padding(
-                  padding: const EdgeInsets.only(top: 90, bottom: 20),
+              children:  <Widget>[
+              // Header
+              BlueHeader(),
+            
+              // Image de profil
+              Padding(
+                  padding: const EdgeInsets.only(top: 150, bottom: 20),
                   child: SizedBox(
-                    height: 220,
+                    height: 250,
                     child: Container(
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
@@ -166,11 +66,11 @@ return Scaffold(
           
             
               Padding(
-                padding: const EdgeInsets.all(13.0),
+                padding: const EdgeInsets.all(30.0),
                 child: Container(
                   
                     
-                    padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 40),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: const BorderRadius.all(
@@ -205,6 +105,7 @@ return Scaffold(
                                       color : Color.fromRGBO(46, 160, 201, 1),
                                     ),
                                   ),
+                                  SizedBox(height: 5),
                                   Text(
                                     'Last Name :',
                                      style: TextStyle(
@@ -213,6 +114,7 @@ return Scaffold(
                                       color : Color.fromRGBO(46, 160, 201, 1),
                                     ),
                                   ),
+                                  SizedBox(height: 5),
                                   Text(
                                     'Relationship :',
                                      style: TextStyle(
@@ -236,6 +138,7 @@ return Scaffold(
                                   color: Color.fromRGBO(54, 48, 48, 0.898),
                                   ),
                                  ),
+                                const SizedBox(height: 5),
                                   Text(
                                 lastName ,
                                 style: const TextStyle(
@@ -245,6 +148,7 @@ return Scaffold(
 
                                   ),
                                  ),
+                                const SizedBox(height: 5),
                                  Text(
                                 relationship,
                                 style: const TextStyle(
@@ -259,7 +163,7 @@ return Scaffold(
                             ],
                 
                           ),
-                          const SizedBox(height: 10,),  
+                          const SizedBox(height: 10),  
                           
                         ],
                       ),
@@ -290,9 +194,9 @@ return Scaffold(
                                   );
                                 },
                                 icon: Image.asset(
-                                  'lib/images/pen.png', // Remplacer 'your_image.png' par le nom de votre image
-                                  height: 40, // Ajouter la hauteur souhaitée
-                                  width: 40, // Ajouter la largeur souhaitée
+                                  'lib/images/ediit.png', // Remplacer 'your_image.png' par le nom de votre image
+                                  height: 60, // Ajouter la hauteur souhaitée
+                                  width: 60, // Ajouter la largeur souhaitée
                                 ),
                               ),
 
@@ -306,16 +210,11 @@ return Scaffold(
                                 },
                                 icon: Image.asset(
                                   'lib/images/delete.png', // Remplacer 'your_image.png' par le nom de votre image
-                                  height: 40, // Ajouter la hauteur souhaitée
-                                  width: 40, // Ajouter la largeur souhaitée
+                                  height: 60, // Ajouter la hauteur souhaitée
+                                  width: 60, // Ajouter la largeur souhaitée
                                 ),
                               ),
-                              IconButton(
-                                      onPressed: () {
-                                        FirebaseAuth.instance.signOut();
-                                      },
-                                      icon: const Icon(Icons.login),
-                                    ),
+                              
 
                             ],
                           )

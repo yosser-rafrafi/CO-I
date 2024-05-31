@@ -1,6 +1,8 @@
 
+import 'package:co_i_front2/pages/forgot_password_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 
 
 class LoginPage extends StatefulWidget {
@@ -56,178 +58,212 @@ final _passwordController = TextEditingController();
               ),
             ),
             // SingleChildScrollView avec le contenu interne
-            SingleChildScrollView(
-              child: Center(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0 ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const SizedBox(height: 40),
-                      const Text(
-                        'HELLO AGAIN',
-                         style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 36,
-                    ),
-                      ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        'Welcome Back!',
-                        style: TextStyle(
-                          fontSize: 20,
+            
+              
+                
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        
+                        
+                        const Column(
+                          children: [
+                            Text(
+                              'HELLO AGAIN',
+                               style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 36,
+                                                ),
+                            ),
+                            Text(
+                          'Welcome Back!',
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 50),
-                      Container(
-                        decoration: BoxDecoration( 
-                          color: const Color.fromARGB(255, 255, 253, 253).withOpacity(0.7),
-                          border: Border.all(color: Colors.white),
-                          borderRadius: BorderRadius.circular(12),
+                          ],
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                          child: Column(
-                            children: [
-                              // Email text Field
-                              const SizedBox(height: 10),        
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: const Color.fromARGB(255, 255, 253, 253).withOpacity(0.01),
-                                  //border: Border.all(color: Colors.white),
-                                  //borderRadius: BorderRadius.circular(12),
+                        
+                        Container(
+                          decoration: BoxDecoration( 
+                            color: const Color.fromARGB(255, 255, 253, 253).withOpacity(0.7),
+                            border: Border.all(color: Colors.white),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                            child: Column(
+                              children: [
+                                // Email text Field
+                                const SizedBox(height: 10),        
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: const Color.fromARGB(255, 255, 253, 253).withOpacity(0.01),
+                                    //border: Border.all(color: Colors.white),
+                                    //borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                        child: Row(
+                                          children:[
+                                              SizedBox(
+                                                width: 30,
+                                                child: Image.asset('lib/images/mail.png', width: 20, height: 20),
+                                              ),
+                                              const SizedBox(width: 10),
+                                              Expanded(
+                                                child: TextField(
+                                                  controller: _emailController,
+                                                  decoration: const InputDecoration(
+                                                    border: InputBorder.none,
+                                                    hintText: 'Email',
+                                                  ),
+                                                ) ,
+                                              )
+                                          ]
+                                        ),
+                                      ),
+                                      // Line 
+                                      Container(
+                                        height: 1,
+                                        color: Colors.grey,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                                      child: Row(
-                                        children:[
+                    
+                                // Password text Field
+                                const SizedBox(height: 10),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: const Color.fromARGB(255, 255, 253, 253).withOpacity(0.01), 
+                                    //border: Border.all(color: Colors.white),
+                                    //borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                        child: Row(
+                                          children: [
                                             SizedBox(
                                               width: 30,
-                                              child: Image.asset('lib/images/mail.png', width: 20, height: 20),
+                                              child: Image.asset('lib/images/padlock.png', width: 20, height: 20),
                                             ),
-                                            const SizedBox(width: 10),
-                                            Expanded(
-                                              child: TextField(
-                                                controller: _emailController,
-                                                decoration: const InputDecoration(
-                                                  border: InputBorder.none,
-                                                  hintText: 'Email',
-                                                ),
-                                              ) ,)
-                                        ]
+                                            const SizedBox(width: 10,),
+                                            Expanded(child: TextField(
+                                              controller: _passwordController,
+                                                  obscureText: true,
+                                                  decoration: 
+                                                  const InputDecoration(
+                                                    border: InputBorder.none,
+                                                    hintText: 'Password', 
+                                                    
+                                                  ),
+                                            ),
+                                            
+                                             )
+                                          ],
+                                          
+                                        ),
                                       ),
-                                    ),
-                                    // Line 
-                                    Container(
-                                      height: 1,
-                                      color: Colors.grey,
-                                    ),
-                                  ],
-                                ),
-                              ),
-
-                              // Password text Field
-                              const SizedBox(height: 10),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: const Color.fromARGB(255, 255, 253, 253).withOpacity(0.01), 
-                                  //border: Border.all(color: Colors.white),
-                                  //borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                                      child: Row(
-                                        children: [
-                                          SizedBox(
-                                            width: 30,
-                                            child: Image.asset('lib/images/padlock.png', width: 20, height: 20),
-                                          ),
-                                          const SizedBox(width: 10,),
-                                          Expanded(child: TextField(
-                                            controller: _passwordController,
-                                                obscureText: true,
-                                                decoration: 
-                                                const InputDecoration(
-                                                  border: InputBorder.none,
-                                                  hintText: 'Password', 
-                                                  
-                                                ),
-                                          )
-                                           ,)
-                                        ],
-                                        
+                                      Container(
+                                        height: 1,
+                                        color: Colors.grey,
                                       ),
-                                    ),
-                                    Container(
-                                      height: 1,
-                                      color: Colors.grey,
-                                    ),
-                                  ],
-                                ),
-                              ),
-
-                              // Bouton signIn
-                              const SizedBox(height:25),
-                              GestureDetector(
-                                onTap: () => signIn(),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: const Color.fromARGB(255, 112, 206, 227),
-                                    borderRadius: BorderRadius.circular(12),
+                    
+                                    ],
                                   ),
-                                  child: const Padding(
-                                    padding: EdgeInsets.all(20),
-                                    child: Center(
-                                      child: Text(
-                                        'Sign In',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
+                                ),
+
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 5 , left: 120),
+                                    
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(context,
+                                          MaterialPageRoute(builder: (context)
+                                          {
+                                            return const ForgotPasswordPage() ;
+                                    
+                                          }));
+                                      },
+                                      child:
+                                        
+                                        const Text(
+                                          
+                                          'Forgot Password',
+                                           style: TextStyle(
+                                              color: Color.fromARGB(255, 18, 159, 169),
+                                              
+                                            ),
+                                        )
+                                    ),
+                                  ),
+                    
+                                // Bouton signIn
+                                const SizedBox(height:25),
+                                GestureDetector(
+                                  onTap: () => signIn(),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: const Color.fromARGB(255, 112, 206, 227),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(20),
+                                      child: Center(
+                                        child: Text(
+                                          'Sign In',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(height: 25),
-                              // Not a member text
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    'Not a member?',
-                                    style: TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  GestureDetector(
-                                    onTap: widget.showRegisterPage,
-                                    child: const Text(
-                                      ' Register Now',
-                                      style: TextStyle(
-                                        color: Color.fromARGB(255, 18, 159, 169),
-                                        fontWeight: FontWeight.bold,
+                                const SizedBox(height: 25),
+                                // Not a member text
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      'Not a member?',
+                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                    GestureDetector(
+                                      onTap: widget.showRegisterPage,
+                                      child: const Text(
+                                        ' Register Now',
+                                        style: TextStyle(
+                                          color: Color.fromARGB(255, 18, 159, 169),
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
-                              
-                            ],
+                                  ],
+                                ),
+                                const SizedBox(height: 20),
+                                
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ),
-            ),
+              
+              
+            
           ],
         ),
       ),

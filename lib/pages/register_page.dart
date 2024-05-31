@@ -32,18 +32,134 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
   
-  Future signUp() async {
-    if (passwordConfirmed()){
-      //create user
-      await FirebaseAuth.instance.createUserWithEmailAndPassword
+ Future signUp() async {
+  // Vérifier si tous les champs sont remplis
+  if (_firstNameController.text.isEmpty ||
+      _lastNameController.text.isEmpty ||
+      _phoneNumberController.text.isEmpty ||
+      _emailController.text.isEmpty ||
+      _passwordController.text.isEmpty ||
+      _confirmpasswordController.text.isEmpty) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: const Text('Please fill in all fields.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+    return;
+  }
+
+  // Vérifier le format de l'adresse email
+  if (!isValidEmail(_emailController.text.trim())) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: const Text('Please enter a valid email address.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+    return;
+  }
+
+  // Vérifier si l'adresse email existe déjà
+  final emailExists = await checkIfEmailExists(_emailController.text.trim());
+  if (emailExists) {
+    showDialog(
+      // ignore: use_build_context_synchronously
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: const Text('This email address is already registered.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+    return;
+  }
+
+  // Vérifier le format du numéro de téléphone
+  if (!isValidPhoneNumber(_phoneNumberController.text.trim())) {
+    showDialog(
+      // ignore: use_build_context_synchronously
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: const Text('Please enter a valid phone number.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+    return;
+  }
+
+  // Vérifier si le mot de passe est confirmé
+  if (!passwordConfirmed()) {
+    showDialog(
+      // ignore: use_build_context_synchronously
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: const Text('Passwords do not match.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+    return;
+  }
+
+  
+createUser();
+
+}
+
+// Si toutes les vérifications passent, créer l'utilisateur
+   Future<void> createUser() async {
+  try {
+    await FirebaseAuth.instance.createUserWithEmailAndPassword
     (
       email: _emailController.text.trim(),
       password: _passwordController.text.trim()
     );
-     
-    
-
-    //add user details 
     addUserDetails(
       
       _firstNameController.text.trim(),
@@ -51,10 +167,74 @@ class _RegisterPageState extends State<RegisterPage> {
       _emailController.text.trim(),
       int.parse(_phoneNumberController.text.trim())
       );
+    AlertDialog(
+          content: const Text('inscription reussi'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+    // Utilisateur créé avec succès
+  } catch (e) {
+    // Gérer les erreurs ici
+    // ignore: avoid_print
+    print('Error: $e');
+    // Afficher un message d'erreur à l'utilisateur
+    // ignore: use_build_context_synchronously
+     showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        content: Text('$e'),
+        actions: [
+          TextButton(
+            onPressed: () {
+             
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
+  }
+}
+
+Future<bool> checkIfEmailExists(String email) async {
+  final querySnapshot = await FirebaseFirestore.instance
+      .collection('users')
+      .where('email', isEqualTo: email)
+      .get();
+  return querySnapshot.docs.isNotEmpty;
+}
+
+bool isValidEmail(String email) {
+  // Expression régulière pour valider le format de l'adresse email
+  final RegExp emailRegex =
+      RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+  return emailRegex.hasMatch(email);
+}
+
+bool isValidPhoneNumber(String phoneNumber) {
+  // Expression régulière pour valider le format du numéro de téléphone (10 chiffres)
+  final RegExp phoneRegex = RegExp(r'^[0-9]{10}$');
+  return phoneRegex.hasMatch(phoneNumber);
+}
+
+bool passwordConfirmed() {
+    if (_passwordController.text.trim() == _confirmpasswordController.text.trim()){
+      return true;
+    } else {
+      return false;
     }
   }
 
-   
+
+
 
   Future addUserDetails( String firstName, String lastName, String email , int phoneNumber) async {
     await FirebaseFirestore.instance.collection('users').add({
@@ -66,13 +246,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
     
 
-  bool passwordConfirmed() {
-    if (_passwordController.text.trim() == _confirmpasswordController.text.trim()){
-      return true;
-    } else {
-      return false;
-    }
-  }
+  
 
  @override
   Widget build(BuildContext context) {
@@ -91,13 +265,14 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             // SingleChildScrollView avec le contenu interne
             SingleChildScrollView(
-              child: Center(
-                child: Container(
+              child: Column(
+                children: [
+                  Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0 ),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 55),
                       const Text(
                         'HELLO THERE',
                         style: TextStyle(
@@ -107,18 +282,16 @@ class _RegisterPageState extends State<RegisterPage> {
                         
                       ),
                       const SizedBox(height: 10),
-                      const Align(
-                        alignment: Alignment.center,
-                        child: Text(
+                     const Text(
                           'Register below with your details!',
                           style: TextStyle(
                             fontSize: 20,
                           ),
                         ),
-                      ),
+                      
 
 
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 40),
 
                       Container(
                         
@@ -356,6 +529,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
                 ),
+                ],
               ),
             ),
           ],
